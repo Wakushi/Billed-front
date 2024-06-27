@@ -236,7 +236,9 @@ describe("Given I am connected as Admin, and I am on Dashboard page, and I click
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
+
       const store = null
+
       const dashboard = new Dashboard({
         document,
         onNavigate,
@@ -244,12 +246,16 @@ describe("Given I am connected as Admin, and I am on Dashboard page, and I click
         bills,
         localStorage: window.localStorage,
       })
+
       const refuseButton = screen.getByTestId("btn-refuse-bill-d")
+
       const handleRefuseSubmit = jest.fn((e) =>
         dashboard.handleRefuseSubmit(e, bills[0])
       )
+
       refuseButton.addEventListener("click", handleRefuseSubmit)
       fireEvent.click(refuseButton)
+      
       expect(handleRefuseSubmit).toHaveBeenCalled()
       const bigBilledIcon = screen.queryByTestId("big-billed-icon")
       expect(bigBilledIcon).toBeTruthy()

@@ -1,13 +1,12 @@
-import VerticalLayout from './VerticalLayout.js'
+import VerticalLayout from "./VerticalLayout.js"
 
 export default () => {
-
-  return (`
+  return `
     <div class='layout'>
       ${VerticalLayout(120)}
       <div class='content'>
         <div class='content-header'>
-          <div class='content-title'> Envoyer une note de frais </div>
+          <div data-testid="new-bill-title" class='content-title'> Envoyer une note de frais </div>
         </div>
         <div class="form-newbill-container content-inner">
           <form data-testid="form-new-bill">
@@ -70,5 +69,5 @@ export default () => {
         </div>
       </div>
     </div>
-  `)
+  `
 }
