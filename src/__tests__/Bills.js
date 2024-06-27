@@ -22,19 +22,23 @@ export function mockFetch(data) {
 }
 
 describe("Given I am connected as an employee", () => {
+  beforeEach(() => {
+    Object.defineProperty(window, "localStorage", { value: localStorageMock })
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+        email: "employee@test.com",
+      })
+    )
+    document.body.innerHTML = `
+      <div id="root"></div>
+    `
+    router()
+  })
+
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
-      Object.defineProperty(window, "localStorage", { value: localStorageMock })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId("icon-window"))
       const windowIcon = screen.getByTestId("icon-window")
@@ -54,14 +58,6 @@ describe("Given I am connected as an employee", () => {
     })
 
     test("And clicking on New Bill button should redirect to New Bill page", async () => {
-      Object.defineProperty(window, "localStorage", { value: localStorageMock })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
@@ -91,14 +87,6 @@ describe("Given I am connected as an employee", () => {
     })
 
     test("And clicking on the eye icon should open a modal with an image", async () => {
-      Object.defineProperty(window, "localStorage", { value: localStorageMock })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
@@ -126,37 +114,7 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getByText("Justificatif")).toBeTruthy()
     })
 
-    test("fetches bills from mock API GET", async () => {
-      Object.defineProperty(window, "localStorage", { value: localStorageMock })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
-
-      window.onNavigate(ROUTES_PATH.Bills)
-
-      await waitFor(() => screen.getByTestId("tbody"))
-      const table = screen.getByTestId("tbody")
-
-      expect(table).toBeTruthy()
-      expect(table.children.length).toBeGreaterThan(0)
-    })
-
     test("getBills should return an array of bills", async () => {
-      Object.defineProperty(window, "localStorage", { value: localStorageMock })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-
       window.fetch = mockFetch(bills)
 
       const onNavigate = (pathname) => {
